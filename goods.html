@@ -1,0 +1,3499 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Triple Goods Sort</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    user-select:none;
+    -webkit-user-select:none;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at top,#263a59,#101827 45%,#05080d);
+    overflow-x:hidden;
+}
+
+.screen{
+    display:none;
+    min-height:100vh;
+}
+
+.screen.active{
+    display:block;
+}
+
+/* ================= HOME ================= */
+
+.home{
+    max-width:1000px;
+    margin:auto;
+    padding:70px 20px;
+    text-align:center;
+}
+
+.title{
+    font-size:clamp(45px,9vw,90px);
+    line-height:.9;
+    font-weight:1000;
+    letter-spacing:4px;
+
+    background:linear-gradient(
+        135deg,
+        #ffffff,
+        #65dfff,
+        #ffffff
+    );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.subtitle{
+    margin-top:18px;
+    color:#91a0b6;
+    letter-spacing:4px;
+}
+
+.home-stats{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:30px;
+}
+
+.stat{
+    min-width:120px;
+    padding:10px 15px;
+    border-radius:14px;
+
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.stat small{
+    display:block;
+    color:#8796aa;
+    font-size:9px;
+}
+
+.stat b{
+    font-size:18px;
+}
+
+.modes{
+    margin-top:50px;
+
+    display:grid;
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+}
+
+.mode{
+    border:0;
+    color:white;
+    padding:30px 15px;
+    border-radius:23px;
+
+    font-size:21px;
+    font-weight:900;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 18px 35px rgba(0,0,0,.35);
+
+    transition:.2s;
+}
+
+.mode:hover{
+    transform:translateY(-5px);
+}
+
+.mode small{
+    display:block;
+    margin-top:7px;
+    opacity:.65;
+    font-size:11px;
+}
+
+.easy{
+    background:
+        linear-gradient(
+            135deg,
+            #15ad7d,
+            #07533f
+        );
+}
+
+.medium{
+    background:
+        linear-gradient(
+            135deg,
+            #d29a27,
+            #725009
+        );
+}
+
+.hard{
+    background:
+        linear-gradient(
+            135deg,
+            #d84d5b,
+            #681f28
+        );
+}
+
+/* ================= LEVELS ================= */
+
+.level-page{
+    max-width:1200px;
+    margin:auto;
+    padding:25px;
+}
+
+.level-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:25px;
+}
+
+.back{
+    border:0;
+    background:#202d43;
+    color:white;
+
+    border-radius:12px;
+    padding:11px 17px;
+
+    cursor:pointer;
+}
+
+.level-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(78px,1fr));
+
+    gap:12px;
+}
+
+.level-button{
+    aspect-ratio:1;
+
+    border:1px solid
+        rgba(255,255,255,.1);
+
+    border-radius:18px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            145deg,
+            #283750,
+            #121b2b
+        );
+
+    font-size:20px;
+    font-weight:900;
+
+    cursor:pointer;
+}
+
+.level-button.completed{
+    border:2px solid #55e6a5;
+}
+
+.level-button.locked{
+    opacity:.3;
+    cursor:not-allowed;
+}
+
+/* ================= TOP ================= */
+
+.top{
+    position:sticky;
+    top:0;
+
+    z-index:50;
+
+    padding:10px 15px;
+
+    background:
+        rgba(6,10,17,.94);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+}
+
+.top-inner{
+    max-width:1250px;
+    margin:auto;
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:10px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:1000;
+    letter-spacing:2px;
+}
+
+.stats{
+    display:flex;
+    gap:8px;
+}
+
+/* ================= GAME ================= */
+
+.game{
+    max-width:1250px;
+    margin:auto;
+    padding:12px;
+}
+
+.game-info{
+    display:grid;
+
+    grid-template-columns:
+        110px 1fr 110px;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.info-box{
+    text-align:center;
+
+    padding:8px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border-radius:13px;
+}
+
+.info-box small{
+    display:block;
+
+    color:#8493aa;
+
+    font-size:9px;
+}
+
+.info-box b{
+    font-size:19px;
+}
+
+.timer{
+    text-align:center;
+
+    font-size:28px;
+    font-weight:1000;
+}
+
+.timer.danger{
+    color:#ff5965;
+
+    animation:
+        pulse .6s infinite alternate;
+}
+
+@keyframes pulse{
+
+    to{
+        transform:scale(1.08);
+    }
+
+}
+
+.timebar{
+    height:5px;
+
+    background:#263247;
+
+    border-radius:20px;
+
+    overflow:hidden;
+}
+
+.timebar div{
+    width:100%;
+    height:100%;
+
+    background:#55e6a5;
+
+    transition:.3s;
+}
+
+/* ================= BOARD ================= */
+
+.board{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    gap:9px;
+
+    max-width:1000px;
+
+    margin:auto;
+}
+
+/*
+==================================================
+IMPORTANT:
+
+EVERY BOX HAS EXACTLY 3 SLOTS.
+
+ANY GOOD CAN ENTER ANY BOX.
+
+THE ONLY LIMIT IS 3 GOODS PER BOX.
+==================================================
+*/
+
+.box{
+
+    position:relative;
+
+    height:118px;
+
+    border-radius:15px;
+
+    padding:8px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #293951,
+            #141e2f
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.11);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.07),
+
+        0 7px 16px
+        rgba(0,0,0,.32);
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    align-items:center;
+
+    justify-items:center;
+
+    transition:.15s;
+}
+
+.box-number{
+
+    position:absolute;
+
+    top:4px;
+    left:7px;
+
+    font-size:7px;
+
+    color:#74839a;
+}
+
+/*
+WHEN DRAGGING ANY GOOD OVER
+ANY BOX WITH SPACE
+*/
+
+.box.drag-over{
+
+    border:
+        2px solid #55e6a5;
+
+    background:
+        rgba(85,230,165,.14);
+
+    transform:scale(1.025);
+}
+
+/* ================= GOODS ================= */
+
+.good{
+
+    width:42px;
+    height:42px;
+
+    border-radius:11px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:27px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #4b5f7b,
+            #222f44
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    box-shadow:
+        0 5px 10px
+        rgba(0,0,0,.35);
+
+    cursor:grab;
+
+    touch-action:none;
+
+    transition:
+        transform .15s,
+        opacity .15s;
+}
+
+.good:active{
+    cursor:grabbing;
+}
+
+.good:hover{
+    transform:
+        translateY(-4px)
+        scale(1.05);
+}
+
+/* ================= CLEAR ANIMATION ================= */
+
+.good.clearing{
+
+    animation:
+        clearGood .35s
+        forwards;
+}
+
+@keyframes clearGood{
+
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            scale(0)
+            rotate(25deg);
+
+        opacity:0;
+    }
+
+}
+
+/* ================= LAYER COUNT ================= */
+
+.layer-count{
+
+    position:absolute;
+
+    bottom:4px;
+    right:6px;
+
+    font-size:7px;
+
+    color:#718199;
+}
+
+/* ================= CONTROLS ================= */
+
+.controls{
+
+    margin:12px auto 0;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+}
+
+.tool{
+
+    border:0;
+
+    background:#202d43;
+
+    color:white;
+
+    padding:10px 15px;
+
+    border-radius:11px;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.tool span{
+    color:#55e6a5;
+}
+
+/* ================= DRAG GHOST ================= */
+
+.drag-ghost{
+
+    position:fixed;
+
+    width:55px;
+    height:55px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:33px;
+
+    pointer-events:none;
+
+    z-index:9999;
+
+    background:
+        linear-gradient(
+            145deg,
+            #526984,
+            #25344a
+        );
+
+    box-shadow:
+        0 18px 30px
+        rgba(0,0,0,.5);
+
+    transform:
+        translate(-50%,-50%)
+        scale(1.12);
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+
+    position:fixed;
+
+    z-index:1000;
+
+    left:50%;
+    top:75px;
+
+    transform:
+        translate(-50%,-100px);
+
+    padding:11px 18px;
+
+    border-radius:12px;
+
+    background:#55e6a5;
+
+    color:#06120d;
+
+    font-weight:900;
+
+    transition:.25s;
+}
+
+.toast.show{
+
+    transform:
+        translate(-50%,0);
+}
+
+/* ================= RESULT ================= */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:500;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        rgba(2,5,10,.82);
+
+    backdrop-filter:blur(10px);
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.card{
+
+    width:min(430px,100%);
+
+    padding:30px;
+
+    border-radius:28px;
+
+    text-align:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #24344d,
+            #111927
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.6);
+}
+
+.card h2{
+
+    font-size:34px;
+
+    margin-bottom:10px;
+}
+
+.rewards{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin:20px;
+}
+
+.reward{
+
+    padding:14px 22px;
+
+    border-radius:13px;
+
+    background:
+        rgba(255,255,255,.06);
+}
+
+.next{
+
+    width:100%;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:13px;
+
+    background:#55e6a5;
+
+    color:#06120d;
+
+    font-weight:1000;
+
+    font-size:16px;
+}
+
+.home-button{
+
+    width:100%;
+
+    margin-top:8px;
+
+    padding:13px;
+
+    border:0;
+
+    border-radius:13px;
+
+    background:#29374e;
+
+    color:white;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:900px){
+
+    .board{
+        grid-template-columns:
+            repeat(4,1fr);
+    }
+}
+
+@media(max-width:650px){
+
+    .home{
+        padding-top:55px;
+    }
+
+    .modes{
+        grid-template-columns:1fr;
+    }
+
+    .top-inner{
+        flex-direction:column;
+    }
+
+    .game-info{
+
+        grid-template-columns:
+            80px 1fr 80px;
+    }
+
+    .board{
+
+        grid-template-columns:
+            repeat(4,1fr);
+
+        gap:6px;
+    }
+
+    .box{
+
+        height:92px;
+
+        padding:5px;
+
+        border-radius:11px;
+    }
+
+    .good{
+
+        width:32px;
+        height:32px;
+
+        font-size:22px;
+
+        border-radius:8px;
+    }
+}
+
+@media(max-width:430px){
+
+    .game{
+        padding:7px;
+    }
+
+    .board{
+
+        grid-template-columns:
+            repeat(4,1fr);
+
+        gap:5px;
+    }
+
+    .box{
+        height:82px;
+    }
+
+    .good{
+
+        width:28px;
+        height:28px;
+
+        font-size:19px;
+    }
+
+    .logo{
+        font-size:18px;
+    }
+
+    .stat{
+        min-width:90px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+HOME
+================================================== -->
+
+<section
+    id="homeScreen"
+    class="screen active"
+>
+
+<div class="home">
+
+    <div class="title">
+
+        TRIPLE<br>
+        GOODS SORT
+
+    </div>
+
+    <div class="subtitle">
+
+        DRAG • SORT • MATCH • EARN
+
+    </div>
+
+
+    <div class="home-stats">
+
+        <div class="stat">
+
+            <small>
+                MONEY
+            </small>
+
+            <b>
+                💰
+                <span id="homeMoney">
+                    0
+                </span>
+            </b>
+
+        </div>
+
+
+        <div class="stat">
+
+            <small>
+                KEYS
+            </small>
+
+            <b>
+                🔑
+                <span id="homeKeys">
+                    0
+                </span>
+            </b>
+
+        </div>
+
+    </div>
+
+
+    <div class="modes">
+
+
+        <button
+            class="mode easy"
+            onclick="openLevels('easy')"
+        >
+
+            🟢 EASY
+
+            <small>
+                Simple sorting
+            </small>
+
+        </button>
+
+
+        <button
+            class="mode medium"
+            onclick="openLevels('medium')"
+        >
+
+            🟡 MEDIUM
+
+            <small>
+                More layers
+            </small>
+
+        </button>
+
+
+        <button
+            class="mode hard"
+            onclick="openLevels('hard')"
+        >
+
+            🔴 HARD
+
+            <small>
+                Deep challenge
+            </small>
+
+        </button>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+LEVELS
+================================================== -->
+
+<section
+    id="levelsScreen"
+    class="screen"
+>
+
+<div class="level-page">
+
+
+    <div class="level-header">
+
+        <button
+            class="back"
+            onclick="showScreen('homeScreen')"
+        >
+            ← HOME
+        </button>
+
+
+        <h2 id="modeTitle">
+            EASY
+        </h2>
+
+
+        <div></div>
+
+    </div>
+
+
+    <div
+        class="level-grid"
+        id="levelGrid"
+    ></div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+GAME
+================================================== -->
+
+<section
+    id="gameScreen"
+    class="screen"
+>
+
+
+<header class="top">
+
+<div class="top-inner">
+
+
+    <div class="logo">
+        TRIPLE GOODS
+    </div>
+
+
+    <div class="stats">
+
+
+        <div class="stat">
+
+            <small>
+                MONEY
+            </small>
+
+            <b>
+                💰
+                <span id="gameMoney">
+                    0
+                </span>
+            </b>
+
+        </div>
+
+
+        <div class="stat">
+
+            <small>
+                KEYS
+            </small>
+
+            <b>
+                🔑
+                <span id="gameKeys">
+                    0
+                </span>
+            </b>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</header>
+
+
+
+<div class="game">
+
+
+<div class="game-info">
+
+
+    <div class="info-box">
+
+        <small>
+            LEVEL
+        </small>
+
+        <b id="gameLevel">
+            1
+        </b>
+
+    </div>
+
+
+    <div>
+
+        <div
+            class="timer"
+            id="timer"
+        >
+            60
+        </div>
+
+
+        <div class="timebar">
+
+            <div
+                id="timeBar"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <small>
+            COMBO
+        </small>
+
+        <b id="combo">
+            x0
+        </b>
+
+    </div>
+
+
+</div>
+
+
+
+<!--
+==================================================
+BOARD
+
+EVERY BOX = 3 SLOTS
+
+ANY GOOD -> ANY BOX
+
+ONLY 3 SAME -> CLEAR
+==================================================
+-->
+
+<div
+    class="board"
+    id="board"
+></div>
+
+
+
+<div class="controls">
+
+
+    <button
+        class="tool"
+        onclick="hint()"
+    >
+
+        🔍 HINT
+
+        <span id="hintCount">
+            3
+        </span>
+
+    </button>
+
+
+    <button
+        class="tool"
+        onclick="shuffle()"
+    >
+
+        🔀 SHUFFLE
+
+        <span id="shuffleCount">
+            2
+        </span>
+
+    </button>
+
+
+    <button
+        class="tool"
+        onclick="addTime()"
+    >
+
+        ⏰ +10
+
+        <span id="timeCount">
+            2
+        </span>
+
+    </button>
+
+
+    <button
+        class="tool"
+        onclick="stopTimer();showScreen('levelsScreen')"
+    >
+
+        📋 LEVELS
+
+    </button>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+RESULT
+================================================== -->
+
+<div
+    class="overlay"
+    id="resultOverlay"
+>
+
+
+<div class="card">
+
+
+    <h2 id="resultTitle">
+        LEVEL COMPLETE!
+    </h2>
+
+
+    <p id="resultText">
+        Great sorting!
+    </p>
+
+
+    <div class="rewards">
+
+
+        <div class="reward">
+
+            💰<br>
+
+            <b id="rewardMoney">
+                +0
+            </b>
+
+        </div>
+
+
+        <div class="reward">
+
+            🔑<br>
+
+            <b id="rewardKeys">
+                +0
+            </b>
+
+        </div>
+
+
+    </div>
+
+
+    <button
+        class="next"
+        id="nextButton"
+        onclick="nextLevel()"
+    >
+
+        NEXT LEVEL →
+
+    </button>
+
+
+    <button
+        class="home-button"
+        onclick="
+            closeResult();
+            showScreen('homeScreen')
+        "
+    >
+
+        HOME
+
+    </button>
+
+
+</div>
+
+</div>
+
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+
+<script>
+
+
+/* ==================================================
+GAME DATA
+================================================== */
+
+
+const GOODS = [
+
+    "🍓",
+    "🍰",
+    "🫙",
+    "🍪",
+    "🧃",
+    "🥫",
+    "🍎",
+    "🍊",
+    "🥤",
+    "🍫",
+    "🧁",
+    "🍯",
+    "🥛",
+    "🍩",
+    "🍉",
+    "🍋",
+    "🧀",
+    "🥨",
+    "🍔",
+    "🌮",
+    "🍕",
+    "🥐",
+    "🍇",
+    "🍒"
+
+];
+
+
+let money =
+    Number(
+        localStorage.getItem(
+            "tgs_money"
+        )
+    ) || 0;
+
+
+let keys =
+    Number(
+        localStorage.getItem(
+            "tgs_keys"
+        )
+    ) || 0;
+
+
+let completed =
+    JSON.parse(
+        localStorage.getItem(
+            "tgs_completed"
+        ) || "{}"
+    );
+
+
+let currentMode =
+    "easy";
+
+
+let currentLevel =
+    1;
+
+
+let board =
+    [];
+
+
+let timer =
+    null;
+
+
+let timeLeft =
+    60;
+
+
+let maxTime =
+    60;
+
+
+let combo =
+    0;
+
+
+let hints =
+    3;
+
+
+let shuffles =
+    2;
+
+
+let timeBoosts =
+    2;
+
+
+
+/* ==================================================
+SAVE
+================================================== */
+
+
+function save(){
+
+    localStorage.setItem(
+        "tgs_money",
+        money
+    );
+
+    localStorage.setItem(
+        "tgs_keys",
+        keys
+    );
+
+    localStorage.setItem(
+        "tgs_completed",
+        JSON.stringify(
+            completed
+        )
+    );
+
+    updateStats();
+}
+
+
+
+/* ==================================================
+SCREENS
+================================================== */
+
+
+function showScreen(id){
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(
+            s =>
+                s.classList.remove(
+                    "active"
+                )
+        );
+
+
+    document
+        .getElementById(id)
+        .classList.add(
+            "active"
+        );
+
+
+    updateStats();
+}
+
+
+
+/* ==================================================
+STATS
+================================================== */
+
+
+function updateStats(){
+
+    document.getElementById(
+        "homeMoney"
+    ).textContent =
+        money.toLocaleString();
+
+
+    document.getElementById(
+        "homeKeys"
+    ).textContent =
+        keys;
+
+
+    document.getElementById(
+        "gameMoney"
+    ).textContent =
+        money.toLocaleString();
+
+
+    document.getElementById(
+        "gameKeys"
+    ).textContent =
+        keys;
+}
+
+
+
+/* ==================================================
+LEVELS
+================================================== */
+
+
+function openLevels(mode){
+
+    currentMode =
+        mode;
+
+
+    document.getElementById(
+        "modeTitle"
+    ).textContent =
+        mode.toUpperCase();
+
+
+    createLevels();
+
+
+    showScreen(
+        "levelsScreen"
+    );
+}
+
+
+
+function createLevels(){
+
+    const grid =
+        document.getElementById(
+            "levelGrid"
+        );
+
+
+    grid.innerHTML =
+        "";
+
+
+    for(
+        let i=1;
+        i<=100;
+        i++
+    ){
+
+        const btn =
+            document.createElement(
+                "button"
+            );
+
+
+        btn.className =
+            "level-button";
+
+
+        const unlocked =
+            i === 1 ||
+            completed[
+                currentMode +
+                "_" +
+                (i-1)
+            ];
+
+
+        if(!unlocked){
+
+            btn.classList.add(
+                "locked"
+            );
+
+            btn.textContent =
+                "🔒";
+
+        }else{
+
+            btn.textContent =
+                i;
+
+
+            if(
+                completed[
+                    currentMode +
+                    "_" +
+                    i
+                ]
+            ){
+
+                btn.classList.add(
+                    "completed"
+                );
+
+            }
+
+
+            btn.onclick =
+                () =>
+                    startLevel(i);
+
+        }
+
+
+        grid.appendChild(
+            btn
+        );
+    }
+}
+
+
+
+/* ==================================================
+DIFFICULTY
+================================================== */
+
+
+function boxCount(){
+
+    if(
+        currentMode ===
+        "easy"
+    ){
+
+        return Math.min(
+            12 +
+            Math.floor(
+                currentLevel / 8
+            ),
+            15
+        );
+
+    }
+
+
+    if(
+        currentMode ===
+        "medium"
+    ){
+
+        return Math.min(
+            12 +
+            Math.floor(
+                currentLevel / 5
+            ),
+            18
+        );
+
+    }
+
+
+    return Math.min(
+        13 +
+        Math.floor(
+            currentLevel / 4
+        ),
+        20
+    );
+}
+
+
+
+function layerCount(){
+
+    if(
+        currentMode ===
+        "easy"
+    ){
+
+        return Math.min(
+            2 +
+            Math.floor(
+                currentLevel / 5
+            ),
+            5
+        );
+
+    }
+
+
+    if(
+        currentMode ===
+        "medium"
+    ){
+
+        return Math.min(
+            3 +
+            Math.floor(
+                currentLevel / 4
+            ),
+            7
+        );
+
+    }
+
+
+    return Math.min(
+        4 +
+        Math.floor(
+            currentLevel / 3
+        ),
+        9
+    );
+}
+
+
+
+function levelTime(){
+
+    if(
+        currentMode ===
+        "easy"
+    ){
+
+        return Math.min(
+            70 +
+            currentLevel * 2,
+            120
+        );
+
+    }
+
+
+    if(
+        currentMode ===
+        "medium"
+    ){
+
+        return Math.min(
+            90 +
+            currentLevel * 2,
+            150
+        );
+
+    }
+
+
+    return Math.min(
+        110 +
+        currentLevel * 3,
+        180
+    );
+}
+
+
+
+/* ==================================================
+START LEVEL
+================================================== */
+
+
+function startLevel(level){
+
+    currentLevel =
+        level;
+
+
+    combo =
+        0;
+
+
+    hints =
+        Math.max(
+            1,
+            3 -
+            Math.floor(
+                level / 25
+            )
+        );
+
+
+    shuffles =
+        Math.max(
+            1,
+            2 -
+            Math.floor(
+                level / 35
+            )
+        );
+
+
+    timeBoosts =
+        2;
+
+
+    timeLeft =
+        levelTime();
+
+
+    maxTime =
+        timeLeft;
+
+
+    createBoard();
+
+
+    document.getElementById(
+        "gameLevel"
+    ).textContent =
+        currentLevel;
+
+
+    document.getElementById(
+        "combo"
+    ).textContent =
+        "x0";
+
+
+    updateTools();
+
+
+    showScreen(
+        "gameScreen"
+    );
+
+
+    startTimer();
+}
+
+
+
+/* ==================================================
+CREATE BOARD
+================================================== */
+
+
+/*
+IMPORTANT:
+
+Each box can contain MAXIMUM 3
+visible goods.
+
+But after those goods are
+cleared, hidden layers can
+appear.
+
+Any type of good can be moved
+into any box.
+*/
+
+
+function createBoard(){
+
+    board =
+        [];
+
+
+    const boxes =
+        boxCount();
+
+
+    const layers =
+        layerCount();
+
+
+    /*
+    Start with empty boxes.
+    */
+
+    for(
+        let i=0;
+        i<boxes;
+        i++
+    ){
+
+        board.push({
+
+            id:i,
+
+            layers:[]
+
+        });
+
+    }
+
+
+    /*
+    Create goods.
+
+    Every good appears in groups
+    of THREE so the puzzle can
+    actually be solved.
+    */
+
+
+    const totalItems =
+        Math.floor(
+            boxes * 2.4
+        );
+
+
+    const groups =
+        Math.floor(
+            totalItems / 3
+        );
+
+
+    let itemNumber =
+        0;
+
+
+    for(
+        let g=0;
+        g<groups;
+        g++
+    ){
+
+        const good =
+            GOODS[
+                g % GOODS.length
+            ];
+
+
+        /*
+        Each triple is distributed
+        into different boxes.
+        */
+
+
+        let selected = [];
+
+
+        while(
+            selected.length < 3
+        ){
+
+            const random =
+                Math.floor(
+                    Math.random() *
+                    boxes
+                );
+
+
+            if(
+                !selected.includes(
+                    random
+                ) &&
+                board[random]
+                    .layers.length < 3
+            ){
+
+                selected.push(
+                    random
+                );
+
+            }
+
+        }
+
+
+        selected.forEach(
+            boxIndex => {
+
+                board[
+                    boxIndex
+                ].layers.push({
+
+                    good:good,
+
+                    id:
+                        "item_" +
+                        Date.now() +
+                        "_" +
+                        itemNumber++
+
+                });
+
+            }
+        );
+
+    }
+
+
+    /*
+    Add hidden goods to create
+    deeper levels.
+
+    We do NOT put more than
+    3 goods in a visible box.
+    */
+
+
+    if(
+        layers > 2
+    ){
+
+        const hiddenGroups =
+            Math.floor(
+                currentLevel / 3
+            );
+
+
+        for(
+            let g=0;
+            g<hiddenGroups;
+            g++
+        ){
+
+            const good =
+                GOODS[
+                    (
+                        groups + g
+                    ) %
+                    GOODS.length
+                ];
+
+
+            let chosen = [];
+
+
+            while(
+                chosen.length < 3
+            ){
+
+                const random =
+                    Math.floor(
+                        Math.random() *
+                        boxes
+                    );
+
+
+                /*
+                Hidden goods can exist
+                behind visible goods.
+                */
+
+                if(
+                    !chosen.includes(
+                        random
+                    )
+                ){
+
+                    chosen.push(
+                        random
+                    );
+
+                }
+
+            }
+
+
+            chosen.forEach(
+                boxIndex => {
+
+                    board[
+                        boxIndex
+                    ].layers.push({
+
+                        good:good,
+
+                        id:
+                            "hidden_" +
+                            Date.now() +
+                            "_" +
+                            g +
+                            "_" +
+                            boxIndex
+
+                    });
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /*
+    Randomize all goods so the
+    player has to solve the puzzle.
+    */
+
+
+    board.forEach(
+        box => {
+
+            box.layers.sort(
+                () =>
+                    Math.random() -
+                    .5
+            );
+
+        }
+    );
+
+
+    renderBoard();
+}
+
+
+
+/* ==================================================
+RENDER BOARD
+================================================== */
+
+
+function renderBoard(){
+
+    const boardElement =
+        document.getElementById(
+            "board"
+        );
+
+
+    boardElement.innerHTML =
+        "";
+
+
+    board.forEach(
+        box => {
+
+
+            const boxElement =
+                document.createElement(
+                    "div"
+                );
+
+
+            boxElement.className =
+                "box";
+
+
+            boxElement.dataset.box =
+                box.id;
+
+
+            const label =
+                document.createElement(
+                    "div"
+                );
+
+
+            label.className =
+                "box-number";
+
+
+            label.textContent =
+                "#" +
+                (box.id + 1);
+
+
+            boxElement.appendChild(
+                label
+            );
+
+
+            /*
+            ONLY FIRST 3 GOODS
+            ARE VISIBLE.
+            */
+
+
+            const visible =
+                box.layers.slice(
+                    0,
+                    3
+                );
+
+
+            visible.forEach(
+                (item,index) => {
+
+
+                    const good =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    good.className =
+                        "good";
+
+
+                    good.textContent =
+                        item.good;
+
+
+                    good.dataset.id =
+                        item.id;
+
+
+                    good.dataset.box =
+                        box.id;
+
+
+                    good.dataset.index =
+                        index;
+
+
+                    attachDrag(
+                        good,
+                        item,
+                        box
+                    );
+
+
+                    boxElement.appendChild(
+                        good
+                    );
+
+
+                }
+            );
+
+
+            /*
+            Show hidden layer count.
+            */
+
+
+            if(
+                box.layers.length > 3
+            ){
+
+                const indicator =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                indicator.className =
+                    "layer-count";
+
+
+                indicator.textContent =
+                    "+" +
+                    (
+                        box.layers.length -
+                        3
+                    );
+
+
+                boxElement.appendChild(
+                    indicator
+                );
+
+            }
+
+
+            boardElement.appendChild(
+                boxElement
+            );
+
+        }
+    );
+}
+
+
+
+/* ==================================================
+DRAG SYSTEM
+================================================== */
+
+
+let dragging =
+    null;
+
+
+let ghost =
+    null;
+
+
+
+function attachDrag(
+    element,
+    item,
+    sourceBox
+){
+
+    element.addEventListener(
+        "pointerdown",
+        function(e){
+
+            e.preventDefault();
+
+
+            dragging = {
+
+                item:item,
+
+                source:sourceBox,
+
+                element:element
+
+            };
+
+
+            ghost =
+                document.createElement(
+                    "div"
+                );
+
+
+            ghost.className =
+                "drag-ghost";
+
+
+            ghost.textContent =
+                item.good;
+
+
+            document.body.appendChild(
+                ghost
+            );
+
+
+            moveGhost(
+                e.clientX,
+                e.clientY
+            );
+
+
+            element.style.opacity =
+                ".25";
+
+
+            element.setPointerCapture(
+                e.pointerId
+            );
+
+
+            element.addEventListener(
+                "pointermove",
+                dragMove
+            );
+
+
+            element.addEventListener(
+                "pointerup",
+                dragEnd,
+                {
+                    once:true
+                }
+            );
+
+
+            element.addEventListener(
+                "pointercancel",
+                dragCancel,
+                {
+                    once:true
+                }
+            );
+
+        }
+    );
+}
+
+
+
+function dragMove(e){
+
+    if(!dragging)
+        return;
+
+
+    e.preventDefault();
+
+
+    moveGhost(
+        e.clientX,
+        e.clientY
+    );
+
+
+    clearBoxHighlights();
+
+
+    const target =
+        document.elementFromPoint(
+            e.clientX,
+            e.clientY
+        );
+
+
+    const box =
+        target
+        ?
+        target.closest(
+            ".box"
+        )
+        :
+        null;
+
+
+    if(box){
+
+        const id =
+            Number(
+                box.dataset.box
+            );
+
+
+        const destination =
+            board[id];
+
+
+        /*
+        IMPORTANT:
+
+        ANY GOOD CAN ENTER ANY BOX.
+
+        Only requirement:
+        destination must have
+        fewer than 3 goods.
+        */
+
+
+        if(
+            canMoveTo(
+                dragging.item,
+                destination
+            )
+        ){
+
+            box.classList.add(
+                "drag-over"
+            );
+
+        }
+
+    }
+
+}
+
+
+
+function dragEnd(e){
+
+    if(!dragging)
+        return;
+
+
+    const target =
+        document.elementFromPoint(
+            e.clientX,
+            e.clientY
+        );
+
+
+    const box =
+        target
+        ?
+        target.closest(
+            ".box"
+        )
+        :
+        null;
+
+
+    clearBoxHighlights();
+
+
+    if(box){
+
+        const destination =
+            board[
+                Number(
+                    box.dataset.box
+                )
+            ];
+
+
+        moveGood(
+            dragging.item,
+            dragging.source,
+            destination
+        );
+
+
+    }else{
+
+        dragging.element.style.opacity =
+            "1";
+
+    }
+
+
+    cleanupDrag();
+}
+
+
+
+function dragCancel(){
+
+    if(
+        dragging &&
+        dragging.element
+    ){
+
+        dragging.element.style.opacity =
+            "1";
+
+    }
+
+
+    clearBoxHighlights();
+
+
+    cleanupDrag();
+}
+
+
+
+function cleanupDrag(){
+
+    if(ghost){
+
+        ghost.remove();
+
+        ghost =
+            null;
+
+    }
+
+
+    dragging =
+        null;
+}
+
+
+
+function moveGhost(x,y){
+
+    if(!ghost)
+        return;
+
+
+    ghost.style.left =
+        x + "px";
+
+
+    ghost.style.top =
+        y + "px";
+}
+
+
+
+/* ==================================================
+THE IMPORTANT MOVE RULE
+================================================== */
+
+
+/*
+==================================================
+THIS IS THE RULE YOU ASKED FOR:
+
+ANY GOOD CAN GO INTO ANY BOX.
+
+NO SAME-GOOD RESTRICTION.
+
+ONLY 3 GOODS MAXIMUM PER BOX.
+==================================================
+*/
+
+
+function canMoveTo(
+    item,
+    destination
+){
+
+    /*
+    Cannot move into the same box.
+    */
+
+    if(
+        dragging &&
+        dragging.source.id ===
+        destination.id
+    ){
+
+        return false;
+
+    }
+
+
+    /*
+    BOX HAS ONLY 3 SPACES.
+
+    If it already has 3,
+    it is full.
+    */
+
+    if(
+        destination.layers.length >= 3
+    ){
+
+        return false;
+
+    }
+
+
+    /*
+    That's it.
+
+    NO CHECK FOR SAME GOOD.
+
+    ANY GOOD CAN ENTER.
+    */
+
+    return true;
+}
+
+
+
+/* ==================================================
+MOVE GOOD
+================================================== */
+
+
+function moveGood(
+    item,
+    source,
+    destination
+){
+
+    /*
+    Check space.
+    */
+
+    if(
+        !canMoveTo(
+            item,
+            destination
+        )
+    ){
+
+        showToast(
+            "❌ BOX IS FULL"
+        );
+
+
+        renderBoard();
+
+
+        return;
+
+    }
+
+
+    /*
+    Remove item from source.
+    */
+
+    const index =
+        source.layers.findIndex(
+            x =>
+                x.id === item.id
+        );
+
+
+    if(index === -1)
+        return;
+
+
+    source.layers.splice(
+        index,
+        1
+    );
+
+
+    /*
+    Add it to destination.
+
+    It doesn't matter what goods
+    are already there.
+    */
+
+    destination.layers.push({
+
+        good:item.good,
+
+        id:item.id
+
+    });
+
+
+    /*
+    NOW CHECK:
+
+    Are the THREE visible goods
+    identical?
+    */
+
+
+    const visible =
+        destination.layers.slice(
+            0,
+            3
+        );
+
+
+    const triple =
+        visible.length === 3 &&
+
+        visible[0].good ===
+        visible[1].good &&
+
+        visible[1].good ===
+        visible[2].good;
+
+
+    if(triple){
+
+        clearTriple(
+            destination
+        );
+
+    }else{
+
+        combo =
+            0;
+
+
+        document.getElementById(
+            "combo"
+        ).textContent =
+            "x0";
+
+
+        renderBoard();
+
+
+        save();
+
+    }
+
+}
+
+
+
+/* ==================================================
+CLEAR TRIPLE
+================================================== */
+
+
+function clearTriple(box){
+
+    combo++;
+
+
+    /*
+    Remove exactly THREE goods.
+    */
+
+    box.layers.splice(
+        0,
+        3
+    );
+
+
+    /*
+    Reward.
+    */
+
+    const reward =
+        75 +
+        combo * 20;
+
+
+    money +=
+        reward;
+
+
+    if(
+        combo % 5 === 0
+    ){
+
+        money +=
+            300;
+
+
+        showToast(
+            "🔥 BIG COMBO BONUS!"
+        );
+
+    }else{
+
+        showToast(
+            "TRIPLE CLEAR! +" +
+            reward +
+            " 💰"
+        );
+
+    }
+
+
+    /*
+    IMPORTANT:
+
+    If this box had hidden
+    goods behind the first 3,
+    they now become visible.
+    */
+
+    renderBoard();
+
+
+    document.getElementById(
+        "combo"
+    ).textContent =
+        "x" +
+        combo;
+
+
+    save();
+
+
+    checkWin();
+}
+
+
+
+/* ==================================================
+CHECK WIN
+================================================== */
+
+
+function checkWin(){
+
+    const remaining =
+        board.some(
+            box =>
+                box.layers.length > 0
+        );
+
+
+    if(
+        !remaining
+    ){
+
+        stopTimer();
+
+
+        const rewardMoney =
+            500 +
+            currentLevel * 75 +
+            combo * 25;
+
+
+        const rewardKeys =
+            currentLevel % 5 === 0
+            ?
+            3
+            :
+            1;
+
+
+        money +=
+            rewardMoney;
+
+
+        keys +=
+            rewardKeys;
+
+
+        completed[
+            currentMode +
+            "_" +
+            currentLevel
+        ] = true;
+
+
+        save();
+
+
+        document.getElementById(
+            "resultTitle"
+        ).textContent =
+            "LEVEL COMPLETE!";
+
+
+        document.getElementById(
+            "resultText"
+        ).textContent =
+            "Excellent sorting!";
+
+
+        document.getElementById(
+            "rewardMoney"
+        ).textContent =
+            "+" +
+            rewardMoney;
+
+
+        document.getElementById(
+            "rewardKeys"
+        ).textContent =
+            "+" +
+            rewardKeys;
+
+
+        document.getElementById(
+            "nextButton"
+        ).textContent =
+            "NEXT LEVEL →";
+
+
+        document.getElementById(
+            "nextButton"
+        ).onclick =
+            nextLevel;
+
+
+        document.getElementById(
+            "resultOverlay"
+        ).classList.add(
+            "show"
+        );
+
+    }
+
+}
+
+
+
+/* ==================================================
+TIMER
+================================================== */
+
+
+function startTimer(){
+
+    stopTimer();
+
+
+    timer =
+        setInterval(
+            () => {
+
+                timeLeft--;
+
+
+                updateTimer();
+
+
+                if(
+                    timeLeft <= 0
+                ){
+
+                    stopTimer();
+
+
+                    lose();
+
+                }
+
+            },
+            1000
+        );
+
+
+    updateTimer();
+}
+
+
+
+function stopTimer(){
+
+    if(timer){
+
+        clearInterval(
+            timer
+        );
+
+
+        timer =
+            null;
+
+    }
+
+}
+
+
+
+function updateTimer(){
+
+    document.getElementById(
+        "timer"
+    ).textContent =
+        timeLeft;
+
+
+    document.getElementById(
+        "timeBar"
+    ).style.width =
+        Math.max(
+            0,
+            (
+                timeLeft /
+                maxTime
+            ) * 100
+        ) +
+        "%";
+
+
+    document.getElementById(
+        "timer"
+    ).classList.toggle(
+        "danger",
+        timeLeft <= 10
+    );
+
+}
+
+
+
+/* ==================================================
+LOSE
+================================================== */
+
+
+function lose(){
+
+    document.getElementById(
+        "resultTitle"
+    ).textContent =
+        "TIME'S UP!";
+
+
+    document.getElementById(
+        "resultText"
+    ).textContent =
+        "Try sorting the goods again.";
+
+
+    document.getElementById(
+        "rewardMoney"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "rewardKeys"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "nextButton"
+    ).textContent =
+        "TRY AGAIN";
+
+
+    document.getElementById(
+        "nextButton"
+    ).onclick =
+        () => {
+
+            closeResult();
+
+            startLevel(
+                currentLevel
+            );
+
+        };
+
+
+    document.getElementById(
+        "resultOverlay"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+
+/* ==================================================
+NEXT LEVEL
+================================================== */
+
+
+function nextLevel(){
+
+    closeResult();
+
+
+    startLevel(
+        currentLevel + 1
+    );
+
+}
+
+
+
+function closeResult(){
+
+    document.getElementById(
+        "resultOverlay"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+
+/* ==================================================
+HINT
+================================================== */
+
+
+function hint(){
+
+    if(
+        hints <= 0
+    ){
+
+        showToast(
+            "No hints left!"
+        );
+
+        return;
+
+    }
+
+
+    hints--;
+
+
+    updateTools();
+
+
+    /*
+    Find any two same visible goods.
+    */
+
+
+    const visible = [];
+
+
+    board.forEach(
+        box => {
+
+            box.layers
+                .slice(0,3)
+                .forEach(
+                    item => {
+
+                        visible.push({
+
+                            item:item,
+
+                            box:box
+
+                        });
+
+                    }
+                );
+
+        }
+    );
+
+
+    let found =
+        null;
+
+
+    for(
+        let i=0;
+        i<visible.length;
+        i++
+    ){
+
+        for(
+            let j=i+1;
+            j<visible.length;
+            j++
+        ){
+
+            if(
+                visible[i]
+                    .item
+                    .good ===
+                visible[j]
+                    .item
+                    .good
+            ){
+
+                found = [
+                    visible[i],
+                    visible[j]
+                ];
+
+                break;
+
+            }
+
+        }
+
+
+        if(found)
+            break;
+
+    }
+
+
+    if(found){
+
+        found.forEach(
+            x => {
+
+                const element =
+                    document.querySelector(
+                        `[data-id="${x.item.id}"]`
+                    );
+
+
+                if(element){
+
+                    element.style.boxShadow =
+                        "0 0 25px #55e6a5";
+
+
+                    element.style.transform =
+                        "scale(1.18)";
+
+
+                    setTimeout(
+                        () => {
+
+                            element.style.boxShadow =
+                                "";
+
+
+                            element.style.transform =
+                                "";
+
+                        },
+                        1200
+                    );
+
+                }
+
+            }
+        );
+
+
+        showToast(
+            "🔍 These goods match"
+        );
+
+
+    }else{
+
+        showToast(
+            "No matching pair found"
+        );
+
+    }
+
+}
+
+
+
+/* ==================================================
+SHUFFLE
+================================================== */
+
+
+function shuffle(){
+
+    if(
+        shuffles <= 0
+    ){
+
+        showToast(
+            "No shuffles left!"
+        );
+
+        return;
+
+    }
+
+
+    shuffles--;
+
+
+    /*
+    Collect all goods.
+    */
+
+    const all =
+        board.flatMap(
+            box =>
+                box.layers
+        );
+
+
+    /*
+    Shuffle them.
+    */
+
+    all.sort(
+        () =>
+            Math.random() -
+            .5
+    );
+
+
+    /*
+    Put maximum 3 into every box.
+    */
+
+    let position =
+        0;
+
+
+    board.forEach(
+        box => {
+
+            box.layers =
+                [];
+
+
+            for(
+                let i=0;
+                i<3 &&
+                position <
+                all.length;
+                i++
+            ){
+
+                box.layers.push(
+                    all[position++]
+                );
+
+            }
+
+        }
+    );
+
+
+    renderBoard();
+
+
+    updateTools();
+
+
+    showToast(
+        "🔀 Goods shuffled"
+    );
+
+}
+
+
+
+/* ==================================================
+ADD TIME
+================================================== */
+
+
+function addTime(){
+
+    if(
+        timeBoosts <= 0
+    ){
+
+        showToast(
+            "No time boosts left!"
+        );
+
+        return;
+
+    }
+
+
+    timeBoosts--;
+
+
+    timeLeft +=
+        10;
+
+
+    maxTime =
+        Math.max(
+            maxTime,
+            timeLeft
+        );
+
+
+    updateTimer();
+
+
+    updateTools();
+
+
+    showToast(
+        "⏰ +10 seconds"
+    );
+
+}
+
+
+
+/* ==================================================
+TOOLS
+================================================== */
+
+
+function updateTools(){
+
+    document.getElementById(
+        "hintCount"
+    ).textContent =
+        hints;
+
+
+    document.getElementById(
+        "shuffleCount"
+    ).textContent =
+        shuffles;
+
+
+    document.getElementById(
+        "timeCount"
+    ).textContent =
+        timeBoosts;
+
+}
+
+
+
+/* ==================================================
+CLEAR HIGHLIGHTS
+================================================== */
+
+
+function clearBoxHighlights(){
+
+    document
+        .querySelectorAll(
+            ".box.drag-over"
+        )
+        .forEach(
+            box =>
+                box.classList.remove(
+                    "drag-over"
+                )
+        );
+
+}
+
+
+
+/* ==================================================
+TOAST
+================================================== */
+
+
+function showToast(text){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        text;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        1300
+    );
+
+}
+
+
+
+/* ==================================================
+START
+================================================== */
+
+updateStats();
+
+</script>
+
+</body>
+</html>
+```
